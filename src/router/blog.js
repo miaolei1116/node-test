@@ -41,22 +41,26 @@ const handleBlogRouter = (req, res) => {
    // 更新一篇博客
    if (method === 'POST' && path === '/api/blog/update') {
     const result = updateBlog(req.body);
-    console.log('result: ', result);
-    if (result) {
-      return new SuccessModel();
-    } else {
-      return new ErrorModel('更新博客失败');
-    }
+    return result.then(val => {
+      if (val) {
+        return new SuccessModel();
+      } else {
+        return new ErrorModel('更新博客失败');
+      }
+    });
   }
 
    // 删除一篇博客
    if (method === 'POST' && path === '/api/blog/del') {
-     const res = delBlog(req.body);
-     if (res) {
-       return new SuccessModel(res);
-     } else {
-       return new ErrorModel('删除博客失败');
-     }
+    req.body.author = 'zhangsan'; // 假数据
+     const result = delBlog(req.body);
+     return result.then(res => {
+      if (res) {
+        return new SuccessModel();
+      } else {
+        return new ErrorModel('删除博客失败');
+      }
+     });
   }
 }
 

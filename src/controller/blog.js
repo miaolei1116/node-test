@@ -37,9 +37,8 @@ const newBlog = (blodData = {}) => {
   });
 }
 
-const updateBlog = (id, blogData = {}) => {
-  console.log('blogData: ', blogData, id);
-  const { title, content } = blogData;
+const updateBlog = (blogData = {}) => {
+  const { title, content, id } = blogData;
   const sql = `
     update blogs set title='${title}', content='${content}' where id=${id};
   `;
@@ -52,8 +51,17 @@ const updateBlog = (id, blogData = {}) => {
   });
 }
 
-const delBlog = (id) => {
-  return true;
+const delBlog = (delData = {}) => {
+  const { id, author } = delData;
+  const sql = `
+    delete from blogs where id=${id} and author='${author}';
+  `;
+  return exec(sql).then(deleteData => {
+    if (deleteData.affectedRows > 0) {
+      return true;
+    }
+    return false;
+  });
 }
 
 module.exports = {
